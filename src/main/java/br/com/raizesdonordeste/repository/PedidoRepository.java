@@ -1,10 +1,12 @@
 package br.com.raizesdonordeste.repository;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import br.com.raizesdonordeste.model.CanalPedido;
 import br.com.raizesdonordeste.model.Pedido;
 
 public interface PedidoRepository extends JpaRepository<Pedido, Long> {
@@ -14,4 +16,6 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
 
     @Query("SELECT COUNT(DISTINCT p.usuario.id) FROM Pedido p")
     Long contarClientesUnicos();
+
+    List<Pedido> findByCanalPedido(CanalPedido canalPedido);
 }

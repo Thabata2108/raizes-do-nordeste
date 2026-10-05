@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import br.com.raizesdonordeste.dto.PedidoRequest;
 import br.com.raizesdonordeste.dto.PedidoResponse;
+import br.com.raizesdonordeste.model.CanalPedido;
 import br.com.raizesdonordeste.model.Pedido;
 import br.com.raizesdonordeste.service.PedidoService;
 
@@ -30,12 +32,13 @@ public class PedidoController {
                 pedido.getDataHora(),
                 pedido.getStatus(),
                 pedido.getValorTotal(),
-                pedido.getUnidade().getNome()
+                pedido.getUnidade().getNome(),
+                pedido.getCanalPedido()
         );
     }
 
     @PostMapping
-    public PedidoResponse criarPedido(
+    public ResponseEntity<PedidoResponse> criarPedido(
             @RequestBody PedidoRequest request,
             @AuthenticationPrincipal Jwt jwt) {
 
@@ -59,12 +62,17 @@ public class PedidoController {
         Pedido pedido =
                 pedidoService.criarPedido(request);
 
-        return converterParaResponse(pedido);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(converterParaResponse(pedido));
     }
 
     @GetMapping
-    public List<PedidoResponse> listarTodos() {
-        return pedidoService.listarTodos()
+    public List<PedidoResponse> listarTodos(
+            @RequestParam(required = false)
+            CanalPedido canalPedido) {
+
+        return pedidoService.listarTodos(canalPedido)
                 .stream()
                 .map(this::converterParaResponse)
                 .toList();

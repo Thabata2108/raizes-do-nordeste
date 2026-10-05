@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.com.raizesdonordeste.dto.ItemPedidoRequest;
 import br.com.raizesdonordeste.dto.PedidoRequest;
+import br.com.raizesdonordeste.model.CanalPedido;
 import br.com.raizesdonordeste.model.ItemPedido;
 import br.com.raizesdonordeste.model.Pedido;
 import br.com.raizesdonordeste.model.ProdutoUnidade;
@@ -46,6 +47,11 @@ public class PedidoService {
     @Transactional
     public Pedido criarPedido(PedidoRequest request) {
 
+        if (request.getCanalPedido() == null) {
+            throw new RuntimeException(
+                    "O canal do pedido é obrigatório");
+        }
+
         if (request.getItens() == null || request.getItens().isEmpty()) {
             throw new RuntimeException(
                     "O pedido deve possuir pelo menos um item");
@@ -62,6 +68,7 @@ public class PedidoService {
         Pedido pedido = new Pedido();
         pedido.setUsuario(usuario);
         pedido.setUnidade(unidade);
+        pedido.setCanalPedido(request.getCanalPedido());
         pedido.setDataHora(LocalDateTime.now());
         pedido.setStatus("Recebido");
         pedido.setValorTotal(BigDecimal.ZERO);
@@ -91,9 +98,7 @@ public class PedidoService {
                         "Produto não pertence à unidade escolhida");
             }
 
-            if (!Boolean.TRUE.equals(
-                    produtoUnidade.getDisponivel())) {
-
+            if (!Boolean.TRUE.equals(produtoUnidade.getDisponivel())) {
                 throw new RuntimeException(
                         "Produto indisponível");
             }
@@ -172,7 +177,12 @@ public class PedidoService {
         return pedidoRepository.save(pedido);
     }
 
-    public List<Pedido> listarTodos() {
+    public List<Pedido> listarTodos(CanalPedido canalPedido) {
+
+        if (canalPedido != null) {
+            return pedidoRepository.findByCanalPedido(canalPedido);
+        }
+
         return pedidoRepository.findAll();
     }
 

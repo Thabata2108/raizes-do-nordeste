@@ -46,7 +46,8 @@ public class PagamentoService {
                     "Este pedido já possui um pagamento");
         }
 
-        String resultado = servicoPagamentoExterno.processar();
+        String resultado = servicoPagamentoExterno.processar(
+        request.getResultadoSimulado());
 
         Pagamento pagamento = new Pagamento();
         pagamento.setPedido(pedido);

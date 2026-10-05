@@ -2,12 +2,15 @@ package br.com.raizesdonordeste.dto;
 
 import java.util.List;
 
+import br.com.raizesdonordeste.model.CanalPedido;
+
 public class PedidoRequest {
 
     private Long usuarioId;
     private Long unidadeId;
     private List<ItemPedidoRequest> itens;
     private Integer pontosUtilizados;
+    private CanalPedido canalPedido;
 
     public PedidoRequest() {
     }
@@ -42,5 +45,13 @@ public class PedidoRequest {
 
     public void setPontosUtilizados(Integer pontosUtilizados) {
         this.pontosUtilizados = pontosUtilizados;
+    }
+
+    public CanalPedido getCanalPedido() {
+        return canalPedido;
+    }
+
+    public void setCanalPedido(CanalPedido canalPedido) {
+        this.canalPedido = canalPedido;
     }
 }

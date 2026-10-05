@@ -5,9 +5,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class ServicoPagamentoExterno {
 
-    public String processar() {
+    public String processar(String resultadoSimulado) {
 
-        // Simulação da resposta de uma instituição externa
+        if ("NEGADO".equalsIgnoreCase(resultadoSimulado)) {
+            return "NEGADO";
+        }
+
         return "APROVADO";
     }
 }

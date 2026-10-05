@@ -2,6 +2,7 @@ package br.com.raizesdonordeste.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -21,8 +22,14 @@ public class Pedido {
     private Unidade unidade;
 
     private LocalDateTime dataHora;
+
     private String status;
+
     private BigDecimal valorTotal;
+
+    @Enumerated(EnumType.STRING)
+    @Column
+    private CanalPedido canalPedido;
 
     public Pedido() {
     }
@@ -73,5 +80,13 @@ public class Pedido {
 
     public void setValorTotal(BigDecimal valorTotal) {
         this.valorTotal = valorTotal;
+    }
+
+    public CanalPedido getCanalPedido() {
+        return canalPedido;
+    }
+
+    public void setCanalPedido(CanalPedido canalPedido) {
+        this.canalPedido = canalPedido;
     }
 }
